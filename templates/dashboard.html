@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Finance Dashboard</title>
+
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+
+            margin: 0;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(0, 102, 255, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(255, 215, 0, 0.10),
+                    transparent 30%
+                ),
+                #06142e;
+
+            color: white;
+
+            min-height: 100vh;
+
+        }
+
+        /* HEADER */
+
+        header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 20px 6%;
+
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+
+            background: rgba(4, 15, 35, 0.85);
+
+            backdrop-filter: blur(10px);
+
+        }
+
+        .logo {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+        .logo span {
+
+            color: #ffd700;
+
+        }
+
+        .logout {
+
+            color: #ff6b6b;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+        }
+
+        .logout:hover {
+
+            text-decoration: underline;
+
+        }
+
+        /* MAIN */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1250px;
+
+            margin: 35px auto;
+
+        }
+
+        h1 {
+
+            margin-bottom: 5px;
+
+        }
+
+        .subtitle {
+
+            color: #8fa0bd;
+
+            margin-bottom: 30px;
+
+        }
+
+        /* CARDS */
+
+        .card {
+
+            background: rgba(8, 24, 53, 0.85);
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 25px;
+
+            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+
+            backdrop-filter: blur(12px);
+
+        }
+
+        .card h2 {
+
+            margin-top: 0;
+
+            margin-bottom: 20px;
+
+        }
+
+        /* FORM */
+
+        .form-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(200px, 1fr));
+
+            gap: 15px;
+
+        }
+
+        label {
+
+            display: block;
+
+            color: #9eacc4;
+
+            font-size: 13px;
+
+            margin-bottom: 7px;
+
+        }
+
+        input,
+        select {
+
+            width: 100%;
+
+            padding: 12px;
+
+            border-radius: 9px;
+
+            border: 1px solid #263a60;
+
+            background: #091a38;
+
+            color: white;
+
+            outline: none;
+
+        }
+
+        input:focus,
+        select:focus {
+
+            border-color: #007bff;
+
+        }
+
+        button {
+
+            margin-top: 20px;
+
+            padding: 13px 25px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: linear-gradient(
+                135deg,
+                #0066ff,
+                #008cff
+            );
+
+            color: white;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+        }
+
+        button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px
+                rgba(0,102,255,0.3);
+
+        }
+
+        /* STAT CARDS */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(180px, 1fr));
+
+            gap: 15px;
+
+            margin-top: 25px;
+
+            margin-bottom: 25px;
+
+        }
+
+        .stat {
+
+            background: #091a38;
+
+            border: 1px solid #1c3155;
+
+            border-radius: 14px;
+
+            padding: 18px;
+
+        }
+
+        .stat-title {
+
+            color: #8292ad;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+
+        }
+
+        .stat-value {
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+        }
+
+        .green {
+
+            color: #00f5a0;
+
+        }
+
+        .red {
+
+            color: #ff3860;
+
+        }
+
+        /* GRAPH */
+
+        #chart {
+
+            width: 100%;
+
+            height: 500px;
+
+            margin-top: 25px;
+
+        }
+
+        /* PORTFOLIO TABLE */
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+        th {
+
+            text-align: left;
+
+            color: #8292ad;
+
+            font-size: 13px;
+
+            padding: 13px;
+
+            border-bottom: 1px solid #1c3155;
+
+        }
+
+        td {
+
+            padding: 15px 13px;
+
+            border-bottom: 1px solid #122442;
+
+        }
+
+        .empty {
+
+            text-align: center;
+
+            color: #8292ad;
+
+            padding: 30px;
+
+        }
+
+        /* MARKET CARDS */
+
+        .market-grid {
+
+            display: grid;
+
+            grid-template-columns: repeat(6, 1fr);
+
+            gap: 15px;
+
+            margin-bottom: 30px;
+
+        }
+
+        .market-card {
+
+            background: linear-gradient(
+                145deg,
+                rgba(10, 31, 65, 0.95),
+                rgba(7, 20, 43, 0.95)
+            );
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 16px;
+
+            padding: 18px;
+
+            transition: 0.25s;
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+
+        }
+
+        .market-card:hover {
+
+            transform: translateY(-5px);
+
+            border-color: rgba(0,212,255,0.4);
+
+            box-shadow:
+                0 15px 35px rgba(0,0,0,0.35);
+
+        }
+
+        .market-name {
+
+            color: #9eacc4;
+
+            font-size: 13px;
+
+            margin-bottom: 12px;
+
+        }
+
+        .market-emoji {
+
+            font-size: 20px;
+
+            margin-right: 5px;
+
+        }
+
+        .market-price {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+
+        }
+
+        .market-change {
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+        }
+
+        .positive {
+
+            color: #00f5a0;
+
+        }
+
+        .negative {
+
+            color: #ff3860;
+
+        }
+
+        @media (max-width: 1000px) {
+
+            .market-grid {
+
+                grid-template-columns: repeat(3, 1fr);
+
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .market-grid {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
+        @media(max-width: 700px) {
+
+            .container {
+
+                width: 95%;
+
+            }
+
+            header {
+
+                padding: 18px;
+
+            }
+
+            #chart {
+
+                height: 400px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+
+        📈 Finance <span>Dashboard</span>
+
+    </div>
+
+    <a href="/logout" class="logout">
+
+        Logout
+
+    </a>
+
+</header>
+
+<div class="container">
+
+    <h1>
+
+        Your Financial Dashboard 💰
+
+    </h1>
+
+    <p class="subtitle">
+
+        Analyze your investments and track market movements.
+
+    </p>
+
+
+    <!-- MARKET OVERVIEW -->
+
+    <div class="market-grid">
+
+        {% for market in market_data %}
+
+        <div class="market-card">
+
+            <div class="market-name">
+
+                <span class="market-emoji">
+
+                    {{ market.emoji }}
+
+                </span>
+
+                {{ market.name }}
+
+            </div>
+
+            <div class="market-price">
+
+                {{ "%.2f"|format(market.price) }}
+
+            </div>
+
+            {% if market.change_percent >= 0 %}
+
+                <div class="market-change positive">
+
+                    ▲ {{ "%.2f"|format(market.change_percent) }}%
+
+                </div>
+
+            {% else %}
+
+                <div class="market-change negative">
+
+                    ▼ {{ "%.2f"|format(market.change_percent|abs) }}%
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- ADD ASSET -->
+
+    <div class="card">
+
+        <h2>
+
+            ➕ Add Asset
+
+        </h2>
+
+        <form action="/add_asset" method="post">
+
+            <div class="form-grid">
+
+                <div>
+
+                    <label>Asset</label>
+
+                    <select name="symbol" required>
+
+                        <option value="GC=F">
+                            🥇 Altın (XAU/USD)
+                        </option>
+
+                        <option value="SI=F">
+                            🥈 Gümüş (XAG/USD)
+                        </option>
+
+                        <option value="CL=F">
+                            🛢️ Ham Petrol (WTI)
+                        </option>
+
+                        <option value="NG=F">
+                            🔥 Doğal Gaz
+                        </option>
+
+                        <option value="USDTRY=X">
+                            💵 Dolar (USD/TRY)
+                        </option>
+
+                        <option value="EURTRY=X">
+                            💶 Euro (EUR/TRY)
+                        </option>
+
+                        <option value="GBPTRY=X">
+                            💷 Sterlin (GBP/TRY)
+                        </option>
+
+                        <option value="BTC-USD">
+                            ₿ Bitcoin (BTC)
+                        </option>
+
+                        <option value="ETH-USD">
+                            Ξ Ethereum (ETH)
+                        </option>
+
+                        <option value="SOL-USD">
+                            ◎ Solana (SOL)
+                        </option>
+
+                        <option value="BNB-USD">
+                            🟡 BNB
+                        </option>
+
+                        <option value="^GSPC">
+                            📈 S&P 500
+                        </option>
+
+                        <option value="^IXIC">
+                            💻 NASDAQ
+                        </option>
+
+                        <option value="XU100.IS">
+                            🇹🇷 BIST 100
+                        </option>
+
+                        <option value="^GDAXI">
+                            🇩🇪 DAX
+                        </option>
+
+                        <option value="^FTSE">
+                            🇬🇧 FTSE 100
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div>
+
+                    <label>Asset Name</label>
+
+                    <input
+                        type="text"
+                        name="asset_name"
+                        placeholder="Bitcoin"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label>Amount</label>
+
+                    <input
+                        type="number"
+                        name="amount"
+                        step="any"
+                        placeholder="0.5"
+                        required
+                    >
+
+                </div>
+
+                <div>
+
+                    <label>Buy Price</label>
+
+                    <input
+                        type="number"
+                        name="buy_price"
+                        step="any"
+                        placeholder="60000"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+            <button type="submit">
+
+                ➕ Add to Portfolio
+
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- MARKET ANALYSIS -->
+
+    <div class="card">
+
+        <h2>
+
+            📊 Market Analysis
+
+        </h2>
+
+        <div class="form-grid">
+
+            <div>
+
+                <label>Asset</label>
+
+                <select id="analysisAsset">
+
+                    <option value="BTC-USD">
+                        ₿ Bitcoin (BTC)
+                    </option>
+
+                    <option value="ETH-USD">
+                        Ξ Ethereum (ETH)
+                    </option>
+
+                    <option value="GC=F">
+                        🥇 Gold
+                    </option>
+
+                    <option value="USDTRY=X">
+                        💵 USD / TRY
+                    </option>
+
+                    <option value="EURTRY=X">
+                        💶 EUR / TRY
+                    </option>
+
+                    <option value="^GSPC">
+                        📈 S&P 500
+                    </option>
+
+                    <option value="^IXIC">
+                        💻 NASDAQ
+                    </option>
+
+                    <option value="XU100.IS">
+                        🇹🇷 BIST 100
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>Time Period</label>
+
+                <select id="period">
+
+                    <option>1 Hafta</option>
+
+                    <option selected>1 Ay</option>
+
+                    <option>3 Ay</option>
+
+                    <option>6 Ay</option>
+
+                    <option>1 Yıl</option>
+
+                    <option>5 Yıl</option>
+
+                </select>
+
+            </div>
+
+            <div>
+
+                <label>Buy Price (optional)</label>
+
+                <input
+                    id="buyPrice"
+                    type="number"
+                    step="any"
+                    placeholder="60000"
+                >
+
+            </div>
+
+            <div>
+
+                <label>Amount (optional)</label>
+
+                <input
+                    id="amount"
+                    type="number"
+                    step="any"
+                    placeholder="0.5"
+                >
+
+            </div>
+
+        </div>
+
+        <button onclick="analyze()">
+
+            🔍 Analyze
+
+        </button>
+
+
+        <!-- ANALYSIS STATISTICS -->
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Current Price
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="currentPrice"
+                >
+                    —
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Price Change
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="priceChange"
+                >
+                    —
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Highest Price
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="highPrice"
+                >
+                    —
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Lowest Price
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="lowPrice"
+                >
+                    —
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Profit / Loss
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="profit"
+                >
+                    —
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    Profit / Loss %
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="profitPercent"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- GRAPH -->
+
+        <div id="chart"></div>
+
+    </div>
+
+
+    <!-- PORTFOLIO SUMMARY -->
+
+    <div class="card">
+
+        <h2>
+
+            📊 Portfolio Overview
+
+        </h2>
+
+        <div class="stats">
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    💵 Total Invested
+                </div>
+
+                <div class="stat-value">
+
+                    ${{ "%.2f"|format(total_invested) }}
+
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    📊 Current Value
+                </div>
+
+                <div class="stat-value">
+
+                    ${{ "%.2f"|format(current_value) }}
+
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    📈 Total Profit/Loss
+                </div>
+
+                <div
+                    class="stat-value
+                    {% if total_profit >= 0 %}
+                        green
+                    {% else %}
+                        red
+                    {% endif %}"
+                >
+
+                    {% if total_profit >= 0 %}
+
+                        +${{ "%.2f"|format(total_profit) }}
+
+                    {% else %}
+
+                        -${{ "%.2f"|format(total_profit|abs) }}
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            <div class="stat">
+
+                <div class="stat-title">
+                    🎯 Return %
+                </div>
+
+                <div
+                    class="stat-value
+                    {% if return_percent >= 0 %}
+                        green
+                    {% else %}
+                        red
+                    {% endif %}"
+                >
+
+                    {{ "%.2f"|format(return_percent) }}%
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PORTFOLIO ALLOCATION -->
+
+    <div class="card">
+
+        <h2>
+
+            🥧 Portfolio Allocation
+
+        </h2>
+
+        <p class="subtitle">
+
+            See how your investments are distributed.
+
+        </p>
+
+        <div
+            id="allocationChart"
+            style="width:100%; height:450px;"
+        ></div>
+
+    </div>
+
+
+    <!-- PORTFOLIO PERFORMANCE -->
+
+    <div class="card">
+
+        <h2>
+
+            📈 Portfolio Performance
+
+        </h2>
+
+        <p class="subtitle">
+
+            Track how your portfolio is performing over time.
+
+        </p>
+
+        <div class="performance-buttons">
+
+            <button onclick="loadPortfolioPerformance('1mo')">
+                1M
+            </button>
+
+            <button onclick="loadPortfolioPerformance('3mo')">
+                3M
+            </button>
+
+            <button onclick="loadPortfolioPerformance('6mo')">
+                6M
+            </button>
+
+            <button onclick="loadPortfolioPerformance('1y')">
+                1Y
+            </button>
+
+        </div>
+
+        <div
+            id="performanceChart"
+            style="width:100%; height:500px;"
+        ></div>
+
+    </div>
+
+
+    <!-- PORTFOLIO -->
+
+    <div class="card">
+
+        <h2>
+
+            💼 Your Portfolio
+
+        </h2>
+
+        {% if portfolio %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Asset</th>
+
+                    <th>Symbol</th>
+
+                    <th>Amount</th>
+
+                    <th>Buy Price</th>
+
+                    <th>Current Price</th>
+
+                    <th>Current Value</th>
+
+                    <th>Profit / Loss</th>
+
+                    <th>Return %</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in portfolio %}
+
+                <tr>
+
+                    <td>
+
+                        {{ item.asset_name }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.symbol }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.amount }}
+
+                    </td>
+
+                    <td>
+
+                        ${{ "%.2f"|format(item.buy_price) }}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.current_price > 0 %}
+
+                            ${{ "%.2f"|format(item.current_price) }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.current_value > 0 %}
+
+                            ${{ "%.2f"|format(item.current_value) }}
+
+                        {% else %}
+
+                            —
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.profit > 0 %}
+
+                            <span class="green">
+
+                                +${{ "%.2f"|format(item.profit) }}
+
+                            </span>
+
+                        {% elif item.profit < 0 %}
+
+                            <span class="red">
+
+                                -${{ "%.2f"|format(item.profit|abs) }}
+
+                            </span>
+
+                        {% else %}
+
+                            $0.00
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if item.profit_percent > 0 %}
+
+                            <span class="green">
+
+                                +{{ "%.2f"|format(item.profit_percent) }}%
+
+                            </span>
+
+                        {% elif item.profit_percent < 0 %}
+
+                            <span class="red">
+
+                                {{ "%.2f"|format(item.profit_percent) }}%
+
+                            </span>
+
+                        {% else %}
+
+                            0.00%
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <a
+                            href="/edit_asset/{{ item.id }}"
+                            style="
+                                display:inline-block;
+                                padding:8px 12px;
+                                border-radius:8px;
+                                background:#0066ff;
+                                color:white;
+                                text-decoration:none;
+                                font-size:12px;
+                                margin-right:4px;
+                            "
+                        >
+
+                            ✏️ Edit
+
+                        </a>
+
+                        <form
+                            action="/delete_asset/{{ item.id }}"
+                            method="post"
+                            style="display:inline;"
+                            onsubmit="
+                                return confirm(
+                                    'Bu varlığı silmek istediğine emin misin?'
+                                );
+                            "
+                        >
+
+                            <button
+                                type="submit"
+                                style="
+                                    margin-top:0;
+                                    padding:8px 12px;
+                                    background:#ff3860;
+                                    font-size:12px;
+                                "
+                            >
+
+                                🗑️ Delete
+
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty">
+
+            Your portfolio is empty.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+
+<script>
+
+async function analyze() {
+
+    const asset =
+        document.getElementById("analysisAsset").value;
+
+    const period =
+        document.getElementById("period").value;
+
+    const buyPrice =
+        document.getElementById("buyPrice").value;
+
+    const amount =
+        document.getElementById("amount").value;
+
+    try {
+
+        const response = await fetch(
+            "/api/analyze",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    asset: asset,
+
+                    period: period,
+
+                    buy_price: buyPrice,
+
+                    amount: amount
+
+                })
+
+            }
+        );
+
+        const data = await response.json();
+
+        if (data.error) {
+
+            alert(data.error);
+
+            return;
+
+        }
+
+        document.getElementById("currentPrice")
+            .textContent =
+            "$" + Number(data.last_price)
+                .toLocaleString(
+                    "en-US",
+                    {
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        const change =
+            Number(data.price_change);
+
+        const changePct =
+            Number(data.price_change_pct);
+
+        document.getElementById("priceChange")
+            .textContent =
+            change.toFixed(2)
+            + " ("
+            + changePct.toFixed(2)
+            + "%)";
+
+        document.getElementById("highPrice")
+            .textContent =
+            "$" + Number(data.high_price)
+                .toLocaleString(
+                    "en-US",
+                    {
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        document.getElementById("lowPrice")
+            .textContent =
+            "$" + Number(data.low_price)
+                .toLocaleString(
+                    "en-US",
+                    {
+                        maximumFractionDigits: 2
+                    }
+                );
+
+        if (data.profit !== null) {
+
+            document.getElementById("profit")
+                .textContent =
+                "$" + Number(data.profit)
+                    .toFixed(2);
+
+            document.getElementById("profitPercent")
+                .textContent =
+                Number(data.profit_percent)
+                    .toFixed(2)
+                + "%";
+
+        } else {
+
+            document.getElementById("profit")
+                .textContent = "—";
+
+            document.getElementById("profitPercent")
+                .textContent = "—";
+
+        }
+
+        if (data.graphJSON) {
+
+            const graphData =
+                JSON.parse(data.graphJSON);
+
+            Plotly.newPlot(
+
+                "chart",
+
+                graphData.data,
+
+                graphData.layout,
+
+                {
+                    responsive: true,
+
+                    displayModeBar: true
+
+                }
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Server'a bağlanırken bir hata oluştu."
+        );
+
+    }
+
+}
+
+
+async function loadPortfolioPerformance(period) {
+
+    try {
+
+        const response = await fetch(
+            "/api/portfolio_performance?period=" + period
+        );
+
+        const data = await response.json();
+
+        if (data.error) {
+
+            alert(data.error);
+
+            return;
+        }
+
+        if (data.graphJSON) {
+
+            const graphData =
+                JSON.parse(data.graphJSON);
+
+            Plotly.newPlot(
+
+                "performanceChart",
+
+                graphData.data,
+
+                graphData.layout,
+
+                {
+                    responsive: true,
+
+                    displayModeBar: true
+
+                }
+
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Portfolio performance yüklenirken hata oluştu."
+        );
+
+    }
+
+}
+
+</script>
+
+
+<script>
+
+    loadPortfolioPerformance("1mo");
+
+</script>
+
+
+</body>
+
+</html>

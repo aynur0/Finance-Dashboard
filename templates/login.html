@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | Finance Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+
+            background:
+                radial-gradient(circle at 15% 20%, rgba(0, 102, 255, 0.25), transparent 30%),
+                radial-gradient(circle at 85% 80%, rgba(255, 215, 0, 0.12), transparent 30%),
+                #06142e;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            overflow: hidden;
+        }
+
+        /* Arka plandaki emojiler */
+
+        .emoji {
+            position: fixed;
+            font-size: 38px;
+            opacity: 0.12;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .e1 { top: 10%; left: 10%; }
+        .e2 { top: 20%; right: 15%; }
+        .e3 { bottom: 15%; left: 17%; }
+        .e4 { bottom: 10%; right: 12%; }
+        .e5 { top: 45%; left: 5%; }
+        .e6 { top: 60%; right: 7%; }
+        .e7 { top: 8%; left: 48%; }
+        .e8 { bottom: 5%; left: 48%; }
+
+        /* Ana kart */
+
+        .login-card {
+
+            width: 420px;
+            max-width: 90%;
+
+            padding: 42px;
+
+            background: rgba(8, 24, 53, 0.88);
+
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            border-radius: 24px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.45);
+
+            backdrop-filter: blur(15px);
+
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 42px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #8fa0bd;
+            margin-bottom: 30px;
+        }
+
+        /* Form */
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b7c3d8;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 11px;
+
+            border: 1px solid #263a60;
+
+            background: #091a38;
+
+            color: white;
+
+            font-size: 15px;
+
+            outline: none;
+
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #0066ff;
+
+            box-shadow:
+                0 0 0 3px rgba(0, 102, 255, 0.15);
+        }
+
+        /* Login butonu */
+
+        .login-button {
+
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: linear-gradient(
+                135deg,
+                #0066ff,
+                #008cff
+            );
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+
+            margin-top: 5px;
+        }
+
+        .login-button:hover {
+
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 25px rgba(0, 102, 255, 0.3);
+        }
+
+        /* Register */
+
+        .register-text {
+
+            margin-top: 25px;
+
+            color: #8fa0bd;
+
+            font-size: 14px;
+        }
+
+        .register-link {
+
+            color: #ffd700;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Ana sayfa */
+
+        .home {
+
+            display: inline-block;
+
+            margin-top: 22px;
+
+            color: #6f819f;
+
+            text-decoration: none;
+
+            font-size: 13px;
+        }
+
+        .home:hover {
+            color: white;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- Arka plan emojileri -->
+
+    <div class="emoji e1">₿</div>
+    <div class="emoji e2">💵</div>
+    <div class="emoji e3">🥇</div>
+    <div class="emoji e4">📈</div>
+    <div class="emoji e5">💶</div>
+    <div class="emoji e6">Ξ</div>
+    <div class="emoji e7">💰</div>
+    <div class="emoji e8">📊</div>
+
+
+    <!-- Login Card -->
+
+    <div class="login-card">
+
+        <div class="logo">
+            📈
+        </div>
+
+        <h1>
+            Welcome Back
+        </h1>
+
+        <p class="subtitle">
+            Login to your Finance Dashboard
+        </p>
+
+
+        <form action="/login" method="post">
+
+            <div class="form-group">
+
+                <label for="username">
+                    Username
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="password">
+                    Password
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="login-button"
+            >
+                🔐 Login
+            </button>
+
+        </form>
+
+
+        <p class="register-text">
+
+            Don't have an account?
+
+            <a
+                href="/register"
+                class="register-link"
+            >
+                Create one
+            </a>
+
+        </p>
+
+
+        <a
+            href="/"
+            class="home"
+        >
+            ← Back to Home
+        </a>
+
+    </div>
+
+</body>
+
+</html>

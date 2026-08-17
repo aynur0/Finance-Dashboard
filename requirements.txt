@@ -1,0 +1,8 @@
+Flask
+Flask-Session
+cs50
+yfinance
+pandas
+plotly
+Werkzeug
+

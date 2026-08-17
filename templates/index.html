@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Finance Dashboard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            font-family: Arial, sans-serif;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(0, 102, 255, 0.18),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 90% 90%,
+                    rgba(255, 215, 0, 0.10),
+                    transparent 30%
+                ),
+                #06142e;
+
+            color: white;
+
+            overflow-x: hidden;
+
+        }
+
+        /* BACKGROUND GLOW */
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+
+            height: 500px;
+
+            background: #0066ff;
+
+            opacity: 0.12;
+
+            filter: blur(120px);
+
+            border-radius: 50%;
+
+            top: -150px;
+
+            left: -100px;
+
+            pointer-events: none;
+
+        }
+
+        body::after {
+
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+
+            height: 500px;
+
+            background: #ffd700;
+
+            opacity: 0.07;
+
+            filter: blur(130px);
+
+            border-radius: 50%;
+
+            bottom: -200px;
+
+            right: -100px;
+
+            pointer-events: none;
+
+        }
+
+        /* MAIN CONTAINER */
+
+        .container {
+
+            width: 94%;
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+
+            padding: 40px 0;
+
+            position: relative;
+
+            z-index: 2;
+
+        }
+
+        /* MAIN CARD */
+
+        .card {
+
+            width: 100%;
+
+            padding: 55px 45px;
+
+            text-align: center;
+
+            background: rgba(10, 25, 55, 0.88);
+
+            border: 1px solid rgba(255,255,255,0.10);
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 30px 80px rgba(0,0,0,0.40),
+                0 0 80px rgba(0,102,255,0.06);
+
+            backdrop-filter: blur(15px);
+
+        }
+
+        /* LOGO */
+
+        .logo {
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            letter-spacing: 3px;
+
+            color: #ffd700;
+
+            margin-bottom: 25px;
+
+        }
+
+        /* TITLE */
+
+        h1 {
+
+            font-size: 52px;
+
+            margin-bottom: 15px;
+
+            background: linear-gradient(
+                90deg,
+                #ffffff,
+                #dce7ff,
+                #ffd700
+            );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+        }
+
+        .subtitle {
+
+            font-size: 18px;
+
+            line-height: 1.6;
+
+            color: #aebbd4;
+
+            margin-bottom: 35px;
+
+        }
+
+        /* MARKET SECTION */
+
+        .market-section {
+
+            margin: 0 auto 35px auto;
+
+            width: 100%;
+
+        }
+
+        .market-title {
+
+            text-align: left;
+
+            color: #8292ad;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 12px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+        }
+
+        /* MARKET GRID */
+
+        .market-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 12px;
+
+        }
+
+        /* MARKET CARD */
+
+        .market-card {
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(13,35,73,0.95),
+                    rgba(7,20,43,0.95)
+                );
+
+            border: 1px solid rgba(255,255,255,0.08);
+
+            border-radius: 15px;
+
+            padding: 17px;
+
+            text-align: left;
+
+            transition: all 0.25s ease;
+
+            min-width: 0;
+
+        }
+
+        .market-card:hover {
+
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(0,212,255,0.35);
+
+            box-shadow:
+                0 12px 30px rgba(0,0,0,0.25);
+
+        }
+
+        .market-name {
+
+            color: #aebbd4;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+        }
+
+        .market-emoji {
+
+            font-size: 17px;
+
+            margin-right: 4px;
+
+        }
+
+        .market-price {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 6px;
+
+            white-space: nowrap;
+
+            overflow: hidden;
+
+            text-overflow: ellipsis;
+
+        }
+
+        .market-change {
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+        }
+
+        .positive {
+
+            color: #00f5a0;
+
+        }
+
+        .negative {
+
+            color: #ff3860;
+
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 15px;
+
+            flex-wrap: wrap;
+
+            margin-top: 15px;
+
+        }
+
+        .btn {
+
+            text-decoration: none;
+
+            padding: 15px 32px;
+
+            border-radius: 13px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            transition: 0.25s;
+
+            display: inline-block;
+
+        }
+
+        .login {
+
+            background: #0066ff;
+
+            color: white;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,102,255,0.25);
+
+        }
+
+        .register {
+
+            background: #ffd700;
+
+            color: #07152f;
+
+            box-shadow:
+                0 10px 30px
+                rgba(255,215,0,0.18);
+
+        }
+
+        .dashboard {
+
+            background: #00c896;
+
+            color: white;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0,200,150,0.20);
+
+        }
+
+        .btn:hover {
+
+            transform: translateY(-3px);
+
+            filter: brightness(1.08);
+
+        }
+
+        /* LOGOUT */
+
+        .logout {
+
+            color: #8fa0bd;
+
+            display: block;
+
+            margin-top: 22px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+        }
+
+        .logout:hover {
+
+            color: white;
+
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 850px) {
+
+            .market-grid {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+
+            }
+
+            h1 {
+
+                font-size: 42px;
+
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+
+                width: 95%;
+
+                padding: 20px 0;
+
+            }
+
+            .card {
+
+                padding: 40px 20px;
+
+                border-radius: 22px;
+
+            }
+
+            h1 {
+
+                font-size: 34px;
+
+            }
+
+            .subtitle {
+
+                font-size: 15px;
+
+            }
+
+            .market-grid {
+
+                grid-template-columns: 1fr;
+
+            }
+
+            .market-card {
+
+                padding: 15px;
+
+            }
+
+            .btn {
+
+                width: 100%;
+
+            }
+
+        }
+/* ===== MARKET WATCHLIST FINAL DESIGN ===== */
+
+.market-grid {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    margin-bottom: 30px !important;
+}
+
+.market-card {
+    background: linear-gradient(
+        145deg,
+        rgba(13, 35, 73, 0.96),
+        rgba(7, 20, 43, 0.96)
+    ) !important;
+
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    min-width: 0 !important;
+    text-align: left !important;
+    transition: 0.25s !important;
+}
+
+.market-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(0,212,255,0.35);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+}
+
+.market-name {
+    color: #9eacc4 !important;
+    font-size: 14px !important;
+    margin-bottom: 12px !important;
+}
+
+.market-price {
+    font-size: 23px !important;
+    font-weight: bold !important;
+    margin-bottom: 8px !important;
+}
+
+.market-change {
+    font-size: 13px !important;
+    font-weight: bold !important;
+}
+
+@media (max-width: 850px) {
+    .market-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+}
+
+@media (max-width: 500px) {
+    .market-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <div class="card">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            FINANCE • DASHBOARD
+
+        </div>
+
+
+        {% if username %}
+
+
+            <!-- LOGGED IN -->
+
+            <h1>
+
+                Hoş geldin, {{ username }}! 👋
+
+            </h1>
+
+
+            <p class="subtitle">
+
+                Your portfolio. Your markets. Your insights.
+
+            </p>
+
+
+        {% else %}
+
+
+            <!-- NOT LOGGED IN -->
+
+            <h1>
+
+                Finance Dashboard 📈
+
+            </h1>
+
+
+            <p class="subtitle">
+
+                Track your portfolio. Analyze markets.
+                Make smarter financial decisions.
+
+            </p>
+
+
+        {% endif %}
+
+
+        <!-- LIVE MARKET -->
+
+        <div class="market-section">
+
+            <div class="market-title">
+
+                Live Market
+
+            </div>
+
+
+            <div class="market-grid">
+
+
+                {% for market in market_data %}
+
+
+                <div class="market-card">
+
+
+                    <div class="market-name">
+
+                        <span class="market-emoji">
+
+                            {{ market.emoji }}
+
+                        </span>
+
+                        {{ market.name }}
+
+                    </div>
+
+
+                    <div class="market-price">
+
+                        {{ "%.2f"|format(market.price) }}
+
+                    </div>
+
+
+                    {% if market.change_percent >= 0 %}
+
+
+                        <div class="market-change positive">
+
+                            ▲
+                            {{ "%.2f"|format(market.change_percent) }}%
+
+                        </div>
+
+
+                    {% else %}
+
+
+                        <div class="market-change negative">
+
+                            ▼
+                            {{ "%.2f"|format(market.change_percent|abs) }}%
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            {% if username %}
+
+
+                <a
+                    href="/dashboard"
+                    class="btn dashboard"
+                >
+
+                    📊 Open Dashboard
+
+                </a>
+
+
+            {% else %}
+
+
+                <a
+                    href="/login"
+                    class="btn login"
+                >
+
+                    🔐 Login
+
+                </a>
+
+
+                <a
+                    href="/register"
+                    class="btn register"
+                >
+
+                    ✨ Create Account
+
+                </a>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% if username %}
+
+
+            <a
+                href="/logout"
+                class="logout"
+            >
+
+                Çıkış Yap
+
+            </a>
+
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
