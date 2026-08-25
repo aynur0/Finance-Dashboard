@@ -1,6 +1,6 @@
 # Finance Dashboard
 
-#### Video Demo: TODO - YouTube video link will be added after recording
+#### Video Demo: https://youtu.be/GAir4Bvp_0k
 
 #### Description:
 
