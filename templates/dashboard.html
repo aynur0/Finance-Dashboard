@@ -1518,6 +1518,53 @@ async function loadPortfolioPerformance(period) {
     }
 
 }
+async function loadPortfolioAllocation() {
+    try {
+        const response = await fetch("/api/portfolio_allocation");
+        const data = await response.json();
+
+        if (data.error) {
+            console.error(data.error);
+            return;
+        }
+
+        if (data.labels && data.values && data.labels.length > 0) {
+            const chartData = [{
+                labels: data.labels,
+                values: data.values,
+                type: "pie",
+                hole: 0.4,
+                textinfo: "label+percent",
+                hoverinfo: "label+value+percent"
+            }];
+
+            const layout = {
+                margin: {
+                    t: 20,
+                    b: 20,
+                    l: 20,
+                    r: 20
+                },
+                showlegend: true
+            };
+
+            Plotly.newPlot(
+                "allocationChart",
+                chartData,
+                layout,
+                {
+                    responsive: true,
+                    displayModeBar: false
+                }
+            );
+        }
+
+    } catch (error) {
+        console.error("Portfolio allocation error:", error);
+    }
+}
+
+loadPortfolioAllocation();
 
 </script>
 
